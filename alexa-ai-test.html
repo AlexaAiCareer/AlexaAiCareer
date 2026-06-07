@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexa.ai — Тест по профориентации</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --border: #2a2a40;
+    --accent: #7c5cfc;
+    --accent2: #00d4ff;
+    --accent3: #ff6b9d;
+    --text: #f0f0ff;
+    --muted: #7070a0;
+    --success: #00e5a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(124,92,252,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(0,212,255,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(255,107,157,0.06) 0%, transparent 60%);
+    animation: bgPulse 8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes bgPulse {
+    0% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.1) rotate(3deg); }
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Intro screen */
+  #intro {
+    text-align: center;
+    padding: 40px 0;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(124,92,252,0.15);
+    border: 1px solid rgba(124,92,252,0.3);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  .intro-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .intro-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .info-icon {
+    width: 28px; height: 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--accent), #5a3fd4);
+    color: white;
+    border: none;
+    padding: 18px 48px;
+    border-radius: 14px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(124,92,252,0.35);
+    letter-spacing: 0.5px;
+  }
+
+  .btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(124,92,252,0.5);
+  }
+
+  /* Quiz screen */
+  #quiz { display: none; }
+
+  .progress-wrap {
+    margin-bottom: 40px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .progress-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .progress-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px rgba(124,92,252,0.6);
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 24px;
+    animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-number {
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .question-text {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .option-letter {
+    width: 32px; height: 32px;
+    min-width: 32px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    transition: all 0.25s ease;
+  }
+
+  .option-btn:hover {
+    border-color: var(--accent);
+    background: rgba(124,92,252,0.08);
+    transform: translateX(4px);
+  }
+
+  .option-btn:hover .option-letter {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .option-btn.selected {
+    border-color: var(--accent);
+    background: rgba(124,92,252,0.12);
+  }
+
+  .option-btn.selected .option-letter {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* Result screen */
+  #result { display: none; }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .result-emoji {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    display: block;
+    animation: bounceIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--success);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .result-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--text), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .result-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .result-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .stat-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    min-width: 160px;
+  }
+
+  .stat-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .stat-bar {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    min-width: 30px;
+    text-align: right;
+  }
+
+  .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .roadmap-step {
+    display: flex;
+    gap: 16px;
+    position: relative;
+  }
+
+  .roadmap-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -4px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .roadmap-dot {
+    width: 40px; height: 40px;
+    min-width: 40px;
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--accent);
+    z-index: 1;
+  }
+
+  .roadmap-content {
+    padding: 8px 0 32px;
+  }
+
+  .roadmap-phase {
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .roadmap-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .roadmap-text {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .courses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .course-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .course-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 6px;
+    min-width: fit-content;
+  }
+
+  .free { background: rgba(0,229,160,0.15); color: var(--success); }
+  .paid { background: rgba(255,107,157,0.15); color: var(--accent3); }
+
+  .course-name {
+    font-size: 0.9rem;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .cta-box {
+    background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(0,212,255,0.08));
+    border: 1px solid rgba(124,92,252,0.3);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .cta-text {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .btn-cta {
+    background: linear-gradient(135deg, var(--accent), #5a3fd4);
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(124,92,252,0.35);
+    margin-right: 12px;
+    margin-bottom: 12px;
+  }
+
+  .btn-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(124,92,252,0.5);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .score-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .score-chip {
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .score-chip.top {
+    border-color: rgba(124,92,252,0.4);
+    color: var(--accent);
+    background: rgba(124,92,252,0.08);
+  }
+
+  @media (max-width: 480px) {
+    .question-card { padding: 24px 20px; }
+    .result-card { padding: 24px 20px; }
+    .cta-box { padding: 28px 20px; }
+    .stat-label { min-width: 120px; font-size: 0.82rem; }
+    .info-row { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Alexa<span style="color:var(--accent)">.ai</span>
+  </div>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="badge">✦ Бесплатный тест</div>
+    <h1 class="intro-title">Найди свою<br>AI-профессию</h1>
+    <p class="intro-sub">10 вопросов — и ты узнаешь какая профессия будущего подходит именно тебе, сколько времени нужно на старт и с чего начать уже сегодня.</p>
+    <div class="info-row">
+      <div class="info-item"><div class="info-icon">⏱</div> 3 минуты</div>
+      <div class="info-item"><div class="info-icon">🎯</div> 5 профессий</div>
+      <div class="info-item"><div class="info-icon">🆓</div> Бесплатно</div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">Начать тест →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz">
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">Прогресс</span>
+        <span class="progress-num" id="progressNum">1 / 10</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:10%"></div>
+      </div>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <div class="question-number" id="questionNum">Вопрос 01</div>
+      <div class="question-text" id="questionText"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result"></div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "Чем ты занимаешься когда хочешь разобраться в новой теме?",
+    options: [
+      { text: "Ищу точные инструкции и пробую на практике сразу", scores: { prompt: 3, art: 1, data: 2, integration: 2, content: 1 } },
+      { text: "Смотрю красивые примеры и вдохновляюсь визуально", scores: { prompt: 0, art: 3, data: 0, integration: 1, content: 2 } },
+      { text: "Собираю данные, сравниваю варианты, строю таблицу", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } },
+      { text: "Сразу спрашиваю — как это применить в реальной жизни", scores: { prompt: 2, art: 1, data: 1, integration: 3, content: 2 } }
+    ]
+  },
+  {
+    text: "Тебе дали свободный вечер без обязательств. Что ты делаешь?",
+    options: [
+      { text: "Экспериментирую с новым инструментом или приложением", scores: { prompt: 3, art: 1, data: 1, integration: 2, content: 1 } },
+      { text: "Снимаю контент, редактирую фото или видео", scores: { prompt: 0, art: 2, data: 0, integration: 0, content: 3 } },
+      { text: "Рисую, создаю что-то визуально красивое", scores: { prompt: 0, art: 3, data: 0, integration: 0, content: 1 } },
+      { text: "Анализирую что-то интересное — цифры, тренды, статистику", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } }
+    ]
+  },
+  {
+    text: "Как тебе комфортнее работать?",
+    options: [
+      { text: "Одна, в тишине, глубоко погружаясь в задачу", scores: { prompt: 2, art: 2, data: 3, integration: 0, content: 1 } },
+      { text: "С командой, решая задачи клиентов вместе", scores: { prompt: 1, art: 1, data: 1, integration: 3, content: 2 } },
+      { text: "Самостоятельно, но с живым результатом который видят люди", scores: { prompt: 2, art: 3, data: 0, integration: 1, content: 3 } },
+      { text: "В роли организатора — соединяю людей и инструменты", scores: { prompt: 1, art: 0, data: 2, integration: 3, content: 1 } }
+    ]
+  },
+  {
+    text: "Что тебя больше всего раздражает в работе?",
+    options: [
+      { text: "Когда нет чёткого результата — непонятно получилось или нет", scores: { prompt: 3, art: 0, data: 2, integration: 2, content: 0 } },
+      { text: "Когда нет места для творчества — всё по шаблону", scores: { prompt: 0, art: 3, data: 0, integration: 0, content: 2 } },
+      { text: "Когда нет данных и все решения на интуиции", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } },
+      { text: "Когда процессы хаотичные и ничего не автоматизировано", scores: { prompt: 2, art: 0, data: 1, integration: 3, content: 1 } }
+    ]
+  },
+  {
+    text: "Какой суперспособностью ты бы хотела обладать?",
+    options: [
+      { text: "Мгновенно находить идеальные слова для любой задачи", scores: { prompt: 3, art: 1, data: 0, integration: 1, content: 2 } },
+      { text: "Создавать потрясающий визуал из любой идеи", scores: { prompt: 0, art: 3, data: 0, integration: 0, content: 1 } },
+      { text: "Видеть скрытые паттерны в любых данных", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } },
+      { text: "Понимать как любая система работает изнутри", scores: { prompt: 2, art: 0, data: 2, integration: 3, content: 0 } }
+    ]
+  },
+  {
+    text: "Ты уже пробовала зарабатывать онлайн? Что получалось лучше?",
+    options: [
+      { text: "Писать тексты, посты, описания", scores: { prompt: 3, art: 0, data: 0, integration: 0, content: 2 } },
+      { text: "Создавать визуальный контент — фото, видео, дизайн", scores: { prompt: 0, art: 3, data: 0, integration: 0, content: 3 } },
+      { text: "Помогать бизнесу — консультировать, организовывать", scores: { prompt: 1, art: 0, data: 2, integration: 3, content: 1 } },
+      { text: "Ещё не пробовала — хочу начать с нуля", scores: { prompt: 2, art: 2, data: 2, integration: 2, content: 2 } }
+    ]
+  },
+  {
+    text: "Как ты относишься к цифрам и таблицам?",
+    options: [
+      { text: "Обожаю — это моя стихия", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } },
+      { text: "Нормально, если есть конкретная задача", scores: { prompt: 2, art: 1, data: 2, integration: 3, content: 1 } },
+      { text: "Терплю но не моё — предпочитаю слова и образы", scores: { prompt: 3, art: 2, data: 0, integration: 1, content: 2 } },
+      { text: "Избегаю по возможности — мне ближе интуиция", scores: { prompt: 1, art: 3, data: 0, integration: 0, content: 2 } }
+    ]
+  },
+  {
+    text: "Что из этого тебе ближе всего?",
+    options: [
+      { text: "Писать точные инструкции которые дают результат", scores: { prompt: 3, art: 0, data: 1, integration: 2, content: 1 } },
+      { text: "Создавать визуальные образы которые останавливают взгляд", scores: { prompt: 0, art: 3, data: 0, integration: 0, content: 2 } },
+      { text: "Находить решения для бизнеса через анализ", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } },
+      { text: "Снимать и рассказывать истории через контент", scores: { prompt: 1, art: 2, data: 0, integration: 0, content: 3 } }
+    ]
+  },
+  {
+    text: "Сколько времени в день ты готова уделять обучению?",
+    options: [
+      { text: "30–60 минут — хочу результат быстро", scores: { prompt: 2, art: 2, data: 1, integration: 1, content: 3 } },
+      { text: "1–2 часа — готова учиться серьёзно", scores: { prompt: 3, art: 2, data: 2, integration: 3, content: 2 } },
+      { text: "2–4 часа — хочу погрузиться глубоко", scores: { prompt: 2, art: 2, data: 3, integration: 2, content: 1 } },
+      { text: "По настроению — буду учиться когда вдохновляет", scores: { prompt: 1, art: 3, data: 0, integration: 0, content: 2 } }
+    ]
+  },
+  {
+    text: "Какой результат своей работы тебя вдохновляет больше всего?",
+    options: [
+      { text: "AI выдал идеальный ответ благодаря моему запросу", scores: { prompt: 3, art: 0, data: 1, integration: 1, content: 0 } },
+      { text: "Картинка получилась такой что люди останавливаются", scores: { prompt: 0, art: 3, data: 0, integration: 0, content: 2 } },
+      { text: "Данные показали инсайт который изменил решение бизнеса", scores: { prompt: 1, art: 0, data: 3, integration: 2, content: 0 } },
+      { text: "Мой ролик собрал тысячи просмотров и комментариев", scores: { prompt: 0, art: 1, data: 0, integration: 0, content: 3 } }
+    ]
+  }
+];
+
+const professions = {
+  prompt: {
+    emoji: "🧠",
+    name: "Prompt Engineer",
+    tagline: "Ты мастер общения с AI",
+    desc: "Ты умеешь точно формулировать задачи и добиваться идеального результата. Твоя суперсила — переводить человеческие мысли в язык который понимает AI. Именно такие специалисты нужны каждой компании прямо сейчас.",
+    income: "50–150К тг/мес",
+    timeline: "2 месяца до первого заработка",
+    difficulty: "🟢 Лёгкий старт",
+    roadmap: [
+      { phase: "Месяц 1", title: "Освоить инструменты", text: "ChatGPT, Claude, Midjourney — учишься писать эффективные промпты каждый день" },
+      { phase: "Месяц 2", title: "Собрать портфолио", text: "Делаешь 10–15 кейсов: посты, описания, скрипты продаж через AI" },
+      { phase: "Месяц 3+", title: "Первые клиенты", text: "Фриланс на Kwork, Telegram-каналы малого бизнеса, офферы напрямую" }
+    ],
+    courses: [
+      { name: "Learn Prompting — полный бесплатный курс", free: true },
+      { name: "DeepLearning.AI — курс от создателей ChatGPT", free: true },
+      { name: "Prompt Engineering на Udemy", free: false }
+    ]
+  },
+  art: {
+    emoji: "🎨",
+    name: "AI Art Director",
+    tagline: "Ты мыслишь образами и визуалом",
+    desc: "У тебя развитый эстетический вкус и желание создавать. AI-инструменты дают тебе суперспособность — воплощать любые визуальные идеи за минуты. Бренды готовы платить за уникальный контент который выделяется.",
+    income: "60–200К тг/мес",
+    timeline: "2 месяца до первого заработка",
+    difficulty: "🟡 Средний старт",
+    roadmap: [
+      { phase: "Неделя 1–2", title: "Освоить Midjourney", text: "Регистрация, базовые команды, изучение стилей и параметров" },
+      { phase: "Месяц 1–2", title: "Портфолио из 20+ работ", text: "Создаёшь работы в разных стилях: минимализм, реализм, арт, коллаж" },
+      { phase: "Месяц 2+", title: "Первые заказы", text: "Аватары, обложки, контент для Instagram — продаёшь пакетами" }
+    ],
+    courses: [
+      { name: "Midjourney официальная документация", free: true },
+      { name: "YouTube канал Theoretically Media", free: true },
+      { name: "AI Art на Skillshare", free: false }
+    ]
+  },
+  data: {
+    emoji: "📊",
+    name: "AI Data Analyst",
+    tagline: "Ты видишь смысл там где другие видят цифры",
+    desc: "Аналитическое мышление — твоя главная сила. С AI-инструментами ты можешь работать с данными без глубокого программирования. Самая высокооплачиваемая точка входа в IT.",
+    income: "100–300К тг/мес",
+    timeline: "3 месяца до первого заработка",
+    difficulty: "🟠 Выше среднего",
+    roadmap: [
+      { phase: "Месяц 1", title: "Продвинутый Excel + ChatGPT", text: "Учишься анализировать данные с помощью AI — без программирования" },
+      { phase: "Месяц 2", title: "Реальные кейсы", text: "Анализируешь продажи, трафик, поведение клиентов для знакомых бизнесов" },
+      { phase: "Месяц 3+", title: "Аутсорс-аналитик", text: "Работаешь с интернет-магазинами и малым бизнесом как внешний аналитик" }
+    ],
+    courses: [
+      { name: "Google Data Analytics на Coursera", free: true },
+      { name: "Kaggle Learn — практика на реальных данных", free: true },
+      { name: "ChatGPT for Data Analysis на Udemy", free: false }
+    ]
+  },
+  integration: {
+    emoji: "🤝",
+    name: "AI Integration Specialist",
+    tagline: "Ты соединяешь людей, бизнес и технологии",
+    desc: "Ты видишь как системы работают вместе и умеешь организовывать процессы. Малый бизнес отчаянно ищет людей которые помогут внедрить AI — и готов хорошо платить.",
+    income: "150–500К тг/мес",
+    timeline: "3 месяца до первого заработка",
+    difficulty: "🔴 Требует усилий",
+    roadmap: [
+      { phase: "Месяц 1", title: "No-code инструменты", text: "Make.com, Zapier, Botpress — учишься автоматизировать без программирования" },
+      { phase: "Месяц 2", title: "Практика на реальных бизнесах", text: "Делаешь автоматизацию для 2–3 знакомых бесплатно — собираешь кейсы" },
+      { phase: "Месяц 3+", title: "Продаёшь как услугу", text: "Чат-боты, CRM-интеграции, автоворонки — пакет от 80К тг" }
+    ],
+    courses: [
+      { name: "Make.com Academy — официальный курс", free: true },
+      { name: "YouTube: Liam Ottley — AI Automation", free: true },
+      { name: "Botpress School", free: true }
+    ]
+  },
+  content: {
+    emoji: "🎥",
+    name: "AI Content Strategist",
+    tagline: "Ты рождена создавать контент",
+    desc: "Ты уже в мире контента — AI просто умножает твою скорость и возможности в 10 раз. Это профессия которая совмещает творчество, стратегию и технологии. Идеально для тех кто уже ведёт соцсети.",
+    income: "60–150К тг/мес",
+    timeline: "1–2 месяца до первого заработка",
+    difficulty: "🟢 Самый быстрый старт",
+    roadmap: [
+      { phase: "Неделя 1–2", title: "AI-инструменты для контента", text: "ChatGPT для текстов, CapCut AI для видео, Canva AI для дизайна" },
+      { phase: "Месяц 1", title: "Тестируешь на своём блоге", text: "Создаёшь контент с AI — смотришь что работает лучше" },
+      { phase: "Месяц 2+", title: "Ведёшь чужие аккаунты", text: "Берёшь 2–3 бренда на ведение — показываешь результат и масштабируешь" }
+    ],
+    courses: [
+      { name: "HubSpot Content Marketing Certification", free: true },
+      { name: "Canva Design School", free: true },
+      { name: "Claude.ai + ChatGPT — ежедневная практика", free: true }
+    ]
+  }
+};
+
+let currentQ = 0;
+let scores = { prompt: 0, art: 0, data: 0, integration: 0, content: 0 };
+
+function startQuiz() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('questionNum').textContent = `Вопрос ${String(currentQ + 1).padStart(2, '0')}`;
+  document.getElementById('questionText').textContent = q.text;
+  document.getElementById('progressNum').textContent = `${currentQ + 1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span>${opt.text}`;
+    btn.onclick = () => selectOption(opt.scores, btn);
+    grid.appendChild(btn);
+  });
+
+  // Re-trigger animation
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+}
+
+function selectOption(optScores, btn) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  setTimeout(() => {
+    Object.keys(optScores).forEach(k => scores[k] += optScores[k]);
+    currentQ++;
+    if (currentQ < questions.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 350);
+}
+
+function showResult() {
+  document.getElementById('quiz').style.display = 'none';
+  const resultEl = document.getElementById('result');
+  resultEl.style.display = 'block';
+
+  // Find top profession
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const topKey = sorted[0][0];
+  const maxScore = sorted[0][1];
+  const p = professions[topKey];
+
+  // Build scores display
+  const profNames = { prompt: 'Prompt Engineer', art: 'AI Art Director', data: 'Data Analyst', integration: 'AI Integration', content: 'Content Strategist' };
+
+  const scoreRows = sorted.map(([k, v]) => `
+    <div class="stat-row">
+      <span class="stat-label">${profNames[k]}</span>
+      <div class="stat-bar-wrap">
+        <div class="stat-bar" style="width:${Math.round((v/maxScore)*100)}%"></div>
+      </div>
+      <span class="stat-val">${v}б</span>
+    </div>
+  `).join('');
+
+  const roadmapHTML = p.roadmap.map((step, i) => `
+    <div class="roadmap-step">
+      <div class="roadmap-dot">${i + 1}</div>
+      <div class="roadmap-content">
+        <div class="roadmap-phase">${step.phase}</div>
+        <div class="roadmap-title">${step.title}</div>
+        <div class="roadmap-text">${step.text}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const coursesHTML = p.courses.map(c => `
+    <div class="course-item">
+      <span class="course-badge ${c.free ? 'free' : 'paid'}">${c.free ? 'Бесплатно' : 'Платно'}</span>
+      <span class="course-name">${c.name}</span>
+    </div>
+  `).join('');
+
+  resultEl.innerHTML = `
+    <div class="result-header">
+      <span class="result-emoji">${p.emoji}</span>
+      <div class="result-label">✦ Твоя профессия</div>
+      <h2 class="result-title">${p.name}</h2>
+      <p class="result-desc">${p.desc}</p>
+    </div>
+
+    <div class="result-card">
+      <div class="result-card-title">📈 Ключевые показатели</div>
+      <div class="stat-row">
+        <span class="stat-label">💰 Доход (старт)</span>
+        <div class="stat-bar-wrap"><div class="stat-bar" style="width:70%"></div></div>
+        <span class="stat-val" style="min-width:120px;font-size:0.8rem">${p.income}</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">⏱ До заработка</span>
+        <div class="stat-bar-wrap"><div class="stat-bar" style="width:60%"></div></div>
+        <span class="stat-val" style="min-width:120px;font-size:0.8rem">${p.timeline}</span>
+      </div>
+      <div style="margin-top:8px;font-size:0.9rem;color:var(--muted)">Сложность: <span style="color:var(--text)">${p.difficulty}</span></div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-card-title">📊 Твои результаты по всем профессиям</div>
+      ${scoreRows}
+    </div>
+
+    <div class="result-card">
+      <div class="result-card-title">🗺️ Твой путь к первому заработку</div>
+      <div class="roadmap">${roadmapHTML}</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-card-title">📚 Рекомендованные курсы</div>
+      <div class="courses-list">${coursesHTML}</div>
+    </div>
+
+    <div class="cta-box">
+      <div class="cta-title">Готова начать путь? 🚀</div>
+      <p class="cta-text">Получи персональный план обучения и доступ к платформе Alexa.ai — всё в одном месте: профессии, курсы, вакансии.</p>
+      <button class="btn-cta">Получить доступ к Alexa.ai</button>
+      <button class="btn-secondary" onclick="restartQuiz()">Пройти тест снова</button>
+    </div>
+  `;
+
+  // Animate bars after render
+  setTimeout(() => {
+    document.querySelectorAll('.stat-bar').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0';
+      setTimeout(() => bar.style.width = w, 100);
+    });
+  }, 200);
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  scores = { prompt: 0, art: 0, data: 0, integration: 0, content: 0 };
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+</script>
+</body>
+</html>
